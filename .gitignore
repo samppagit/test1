@@ -1,0 +1,31 @@
+# Ignore environment files with secrets
+producthunt.env
+.env
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# VS Code settings folder (since you use Codespaces)
+.vscode/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Excel output files (optional, if you want to ignore generated .xls)
+# *.xls
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# Ignore Python virtual environment folders (if any)
+venv/
+env/

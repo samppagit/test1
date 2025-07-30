@@ -89,9 +89,18 @@ if __name__ == "__main__":
         pd.set_option("display.max_rows", None)
         print("\nTop 10 Most Upvoted Products per Day (Last 21 Days):\n")
         print(df.to_string(index=False))
+        
         today_str = datetime.now().strftime("%Y-%m-%d")
-        filename = f"producthunt_top_products_{today_str}.xlsx"
-        df.to_excel(filename, index=False)
-        print(f"\nExcel file saved as '{filename}'")
+
+        # Save as Excel
+        excel_filename = f"producthunt_top_products_{today_str}.xlsx"
+        df.to_excel(excel_filename, index=False)
+        print(f"\nExcel file saved as '{excel_filename}'")
+
+        # Save as HTML
+        html_filename = f"producthunt_top_products_{today_str}.html"
+        df.to_html(html_filename, index=False, classes="table table-striped")
+        print(f"HTML file saved as '{html_filename}'")
+
     except Exception as e:
         print(f"Error: {e}")

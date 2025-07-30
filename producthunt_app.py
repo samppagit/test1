@@ -5,8 +5,8 @@ import streamlit as st
 from datetime import datetime, timedelta, timezone
 
 # Get credentials from Streamlit Secrets
-CLIENT_ID = os.getenv("PRODUCTHUNT_CLIENT_ID")
-CLIENT_SECRET = os.getenv("PRODUCTHUNT_CLIENT_SECRET")
+CLIENT_ID = st.secrets["PRODUCTHUNT_CLIENT_ID"]
+CLIENT_SECRET = st.secrets["PRODUCTHUNT_CLIENT_SECRET"]
 
 # API URLs
 TOKEN_URL = "https://api.producthunt.com/v2/oauth/token"

@@ -3,6 +3,7 @@ import requests
 import pandas as pd
 import streamlit as st
 from datetime import datetime, timedelta, timezone
+st.set_page_config(layout="wide", page_title="Product Hunt Top Products")
 
 # Get credentials from Streamlit Secrets
 CLIENT_ID = st.secrets["PRODUCTHUNT_CLIENT_ID"]
@@ -78,13 +79,14 @@ def fetch_top_products(access_token, days=21, top_n=10):
     return pd.DataFrame(results)
 
 # Streamlit App Layout
-st.title("🚀 Product Hunt Top Products (Last 21 Days)")
+st.title("🚀 Product Hunt Top Products")
 st.write("Displays the top 10 most upvoted products for each day.")
 
 try:
     token = get_access_token()
     df = fetch_top_products(token)
-    st.dataframe(df)
+    st.dataframe(df, use_container_width=True, height=600)
+
 
     # Download as Excel
     today_str = datetime.now().strftime("%Y-%m-%d")

@@ -3,6 +3,12 @@ import requests
 import pandas as pd
 import streamlit as st
 from datetime import datetime, timedelta, timezone
+import time
+
+@st.cache_data(ttl=3600)  # cache for 1 hour
+def get_cached_products(token):
+    return fetch_top_products(token)
+
 st.set_page_config(layout="wide", page_title="Product Hunt Top Products")
 
 # Get credentials from Streamlit Secrets
@@ -59,13 +65,22 @@ def fetch_top_products(access_token, days=21, top_n=10):
             "date": start_time,
             "dateEnd": end_time
         }
-        response = requests.post(GRAPHQL_URL, headers=headers, json={
-            "query": GRAPHQL_QUERY,
-            "variables": variables
-        })
-        if response.status_code != 200:
-            st.warning(f"Failed to fetch data for {day}")
+        success = False
+        for attempt in range(3):  # try up to 3 times
+            response = requests.post(GRAPHQL_URL, headers=headers, json={
+                "query": GRAPHQL_QUERY,
+                "variables": variables
+            })
+            if response.status_code == 200:
+                success = True
+                break
+            else:
+                time.sleep(2)  # wait before retrying
+
+        if not success:
+            st.warning(f"Failed to fetch data for {day} — {response.text}")
             continue
+
         posts = response.json()["data"]["posts"]["edges"]
         for post in posts[:top_n]:
             node = post["node"]
@@ -84,8 +99,14 @@ st.write("Displays the top 10 most upvoted products for each day.")
 
 try:
     token = get_access_token()
-    df = fetch_top_products(token)
+    try:
+        df = fetch_top_products(token)
+    except Exception as fetch_error:
+        st.error(f"Failed to fetch data: {fetch_error}")
+        df = pd.DataFrame()
+
     st.dataframe(df, use_container_width=True, height=600)
+
 
 
     # Download as Excel

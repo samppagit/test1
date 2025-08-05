@@ -105,15 +105,29 @@ try:
         st.error(f"Failed to fetch data: {fetch_error}")
         df = pd.DataFrame()
 
+    # Show full table
+    st.dataframe(df, use_container_width=True, height=600)
+
     # Only plot if data is available
     if not df.empty:
         # Calculate daily upvotes
         daily_upvotes = df.groupby("date")["upvotes"].sum().reset_index()
-        st.subheader("📊 Total Upvotes Per Day")
-        st.line_chart(daily_upvotes.set_index("date"))
 
-    # Show full table
-    st.dataframe(df, use_container_width=True, height=600)
+        # Create a line chart with red color using matplotlib
+        import matplotlib.pyplot as plt
+
+        st.subheader("📊 Total Upvotes Per Day")
+
+        fig, ax = plt.subplots()
+        ax.plot(daily_upvotes["date"], daily_upvotes["upvotes"], color="red", marker="o")
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Total Upvotes")
+        ax.set_title("Product Hunt Daily Upvotes")
+        ax.grid(True)
+        plt.xticks(rotation=45)
+
+        st.pyplot(fig)
+
 
 
 

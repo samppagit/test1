@@ -4,6 +4,7 @@ import pandas as pd
 import streamlit as st
 from datetime import datetime, timedelta, timezone
 import time
+import matplotlib.pyplot as plt
 
 @st.cache_data(ttl=3600)  # cache for 1 hour
 def get_cached_products(token):
@@ -113,8 +114,6 @@ try:
         # Calculate daily upvotes
         daily_upvotes = df.groupby("date")["upvotes"].sum().reset_index()
 
-        # Create a line chart with red color using matplotlib
-        import matplotlib.pyplot as plt
 
         st.subheader("📊 Total Upvotes Per Day")
 

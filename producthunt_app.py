@@ -105,7 +105,16 @@ try:
         st.error(f"Failed to fetch data: {fetch_error}")
         df = pd.DataFrame()
 
+    # Only plot if data is available
+    if not df.empty:
+        # Calculate daily upvotes
+        daily_upvotes = df.groupby("date")["upvotes"].sum().reset_index()
+        st.subheader("📊 Total Upvotes Per Day")
+        st.line_chart(daily_upvotes.set_index("date"))
+
+    # Show full table
     st.dataframe(df, use_container_width=True, height=600)
+
 
 
 

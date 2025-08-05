@@ -115,15 +115,14 @@ try:
         daily_upvotes = df.groupby("date")["upvotes"].sum().reset_index()
 
 
-        st.subheader("📊 Total Upvotes Per Day")
-
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(figsize=(10, 4))  # Adjusted figure size
         ax.plot(daily_upvotes["date"], daily_upvotes["upvotes"], color="red", marker="o")
         ax.set_xlabel("Date")
         ax.set_ylabel("Total Upvotes")
         ax.set_title("Product Hunt Daily Upvotes")
         ax.grid(True)
         plt.xticks(rotation=45)
+        plt.tight_layout()
 
         st.pyplot(fig)
 
